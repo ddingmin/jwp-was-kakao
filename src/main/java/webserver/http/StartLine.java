@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StartLine {
-    private final String method;
+    private final HttpMethod method;
     private final String uri;
     private final String path;
     private final Extension extension;
@@ -14,7 +14,7 @@ public class StartLine {
 
     public StartLine(String line) {
         String[] split = line.split(" ");
-        this.method = split[0];
+        this.method = HttpMethod.valueOf(split[0].toUpperCase());
         this.uri = split[1];
         this.path = uri.split("\\?")[0];
         this.extension = initExtension();
@@ -40,7 +40,7 @@ public class StartLine {
                 ));
     }
 
-    public String getMethod() {
+    public HttpMethod getMethod() {
         return method;
     }
 

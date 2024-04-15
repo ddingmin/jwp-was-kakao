@@ -32,7 +32,7 @@ public class HttpRequest {
         this.body = body.toString();
     }
 
-    public String getMethod() {
+    public HttpMethod getMethod() {
         return startLine.getMethod();
     }
 
