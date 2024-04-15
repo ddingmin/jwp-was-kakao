@@ -19,14 +19,6 @@ public class HttpResponse {
         this.body = body;
     }
 
-    public static HttpResponse error() {
-        return new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, new HashMap<>(), new byte[0]);
-    }
-
-    public static HttpResponse ok(byte[] body) {
-        return new HttpResponse(HttpStatus.OK, new HashMap<>(), body);
-    }
-
     public String getStartLine() {
         return "HTTP/1.1 " + statusCode.getValue() + " " + statusCode.getMessage();
     }

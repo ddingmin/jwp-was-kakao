@@ -15,7 +15,7 @@ public class ResourceHandler implements Handler {
             httpResponse.addHeader("Content-Type", extension.getContentType());
             httpResponse.setBody(FileIoUtils.loadFileFromClasspath(extension.getBasicFilePath() + httpRequest.getPath()));
         } catch (Exception e) {
-            httpResponse = HttpResponse.error();
+            httpResponse.setStatusCode(HttpStatus.NOT_FOUND);
         }
     }
 }
