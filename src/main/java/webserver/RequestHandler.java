@@ -2,7 +2,6 @@ package webserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.IOUtils;
 import utils.RequestReaderUtils;
 import webserver.handler.Handler;
 import webserver.handler.RequestHandlerMapper;
@@ -29,13 +28,13 @@ public class RequestHandler implements Runnable {
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-            String request = RequestReaderUtils.read(reader);
-            logger.debug(request);
+            String requestHeader = RequestReaderUtils.readHeader(reader);
+            logger.debug(requestHeader);
 
-            HttpRequest httpRequest = new HttpRequest(request);
+            HttpRequest httpRequest = new HttpRequest(requestHeader);
+            httpRequest.setBody(RequestReaderUtils.readBody(reader, Integer.parseInt(httpRequest.getAttribute("Content-Length"))));
+
             HttpResponse httpResponse = new HttpResponse();
-
-            httpRequest.setBody(IOUtils.readData(reader, Integer.parseInt(httpRequest.getAttribute("Content-Length"))));
 
             logger.debug(httpRequest.getBody());
 
