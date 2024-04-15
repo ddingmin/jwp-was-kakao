@@ -25,7 +25,7 @@ public class RequestHandler implements Runnable {
         logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+        try (InputStream in = connection.getInputStream()) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
             String requestHeader = RequestReaderUtils.readHeader(reader);
@@ -33,25 +33,27 @@ public class RequestHandler implements Runnable {
 
             HttpRequest httpRequest = new HttpRequest(requestHeader);
             httpRequest.setBody(RequestReaderUtils.readBody(reader, Integer.parseInt(httpRequest.getAttribute("Content-Length"))));
-
-            HttpResponse httpResponse = new HttpResponse();
-
             logger.debug(httpRequest.getBody());
 
+            HttpResponse httpResponse = new HttpResponse();
             Handler handler = RequestHandlerMapper.mapping(httpRequest);
             handler.handling(httpRequest, httpResponse);
 
-            DataOutputStream dos = new DataOutputStream(out);
-            response(dos, httpResponse);
+            response(httpResponse);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void response(DataOutputStream dos, HttpResponse response) {
-        responseStartLine(dos, response.getStartLine());
-        responseHeaders(dos, response.getHeaders());
-        responseBody(dos, response.getBody());
+    private void response(HttpResponse response) {
+        try (OutputStream out = connection.getOutputStream()) {
+            DataOutputStream dos = new DataOutputStream(out);
+            responseStartLine(dos, response.getStartLine());
+            responseHeaders(dos, response.getHeaders());
+            responseBody(dos, response.getBody());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 
     private void responseStartLine(DataOutputStream dos, String startLine) {
@@ -77,17 +79,6 @@ public class RequestHandler implements Runnable {
             dos.writeBytes("\r\n");
             dos.write(body, 0, body.length);
             dos.flush();
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
