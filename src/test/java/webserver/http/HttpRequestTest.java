@@ -1,5 +1,6 @@
 package webserver.http;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -19,14 +20,16 @@ public class HttpRequestTest {
 
     @ParameterizedTest
     @CsvSource(value = {"GET / HTTP/1.1, GET", "POST / HTTP/1.1, POST"})
+    @DisplayName("http request startLine의 메소드를 저장한다.")
     void request_get_http_method(String requestRaw, String method) {
         HttpRequest request = new HttpRequest(requestRaw);
 
-        assertThat(request.getMethod()).isEqualTo(method);
+        assertThat(request.getMethod()).isEqualTo(HttpMethod.valueOf(method));
     }
 
     @ParameterizedTest
     @CsvSource(value = {"GET /index.html HTTP/1.1, /index.html", "GET / HTTP/1.1, /"})
+    @DisplayName("http request startLine의 경로를 저장한다.")
     void request_path(String requestRaw, String path) {
         HttpRequest request = new HttpRequest(requestRaw);
 
@@ -35,6 +38,7 @@ public class HttpRequestTest {
 
     @ParameterizedTest
     @CsvSource(value = {"GET /index.html HTTP/1.1, true", "GET / HTTP/1.1, false", "GET /menu/favicon.ico HTTP/1.1, true"})
+    @DisplayName("http request startLine의 경로의 확장자를 저장한다.")
     void has_extension(String requestRaw, boolean hasExtension) {
         HttpRequest request = new HttpRequest(requestRaw);
 
@@ -42,15 +46,17 @@ public class HttpRequestTest {
     }
 
     @Test
+    @DisplayName("http request body가 없는 경우 빈 body를 저장한다.")
     void no_body(){
-        HttpRequest request = new HttpRequest("method uri version\nkey:value\n\n");
+        HttpRequest request = new HttpRequest("GET uri version\nkey:value\n\n");
 
         assertThat(request.getBody()).isEqualTo("");
     }
 
     @Test
+    @DisplayName("http request body를 저장한다.")
     void body(){
-        HttpRequest request = new HttpRequest("method uri version\nkey: value\n\nbody");
+        HttpRequest request = new HttpRequest("GET uri version\nkey: value\n\nbody");
 
         assertThat(request.getBody()).isEqualTo("body");
     }

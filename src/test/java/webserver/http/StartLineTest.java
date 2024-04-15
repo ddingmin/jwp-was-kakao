@@ -10,7 +10,7 @@ class StartLineTest {
     void method() {
         StartLine startLine = new StartLine("GET / HTTP/1.1");
 
-        assertThat(startLine.getMethod()).isEqualTo("GET");
+        assertThat(startLine.getMethod()).isEqualTo(HttpMethod.GET);
     }
 
     @Test
