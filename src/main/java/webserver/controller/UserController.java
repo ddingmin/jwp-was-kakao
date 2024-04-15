@@ -1,5 +1,50 @@
 package webserver.controller;
 
-public class UserController {
+import utils.KeyValueParser;
+import webserver.controller.request.UserRequest;
+import webserver.http.HttpRequest;
+import webserver.http.HttpResponse;
+import webserver.http.HttpStatus;
+import webserver.service.UserService;
 
+import java.util.Map;
+
+public class UserController implements Controller {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    public String register(UserRequest request) {
+        userService.register(request);
+        return "/index.html";
+    }
+
+    @Override
+    public void doGet(HttpRequest request, HttpResponse response) {
+        if (request.getPath().equals("/user/create")) {
+            UserRequest userRequest = new UserRequest(request.getAttribute("userId"),
+                    request.getAttribute("name"),
+                    request.getAttribute("password"),
+                    request.getAttribute("email"));
+            String target = register(userRequest);
+            response.setStatusCode(HttpStatus.FOUND);
+            response.addHeader("Location", target);
+        }
+    }
+
+    @Override
+    public void doPost(HttpRequest request, HttpResponse response) {
+        if (request.getPath().equals("/user/create")) {
+            Map<String, String> userParameters = KeyValueParser.parse(request.getBody());
+            UserRequest userRequest = new UserRequest(userParameters.get("userId"),
+                    userParameters.get("name"),
+                    userParameters.get("password"),
+                    userParameters.get("email"));
+            String target = register(userRequest);
+            response.setStatusCode(HttpStatus.FOUND);
+            response.addHeader("Location", target);
+        }
+    }
 }
