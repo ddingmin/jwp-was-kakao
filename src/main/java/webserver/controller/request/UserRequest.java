@@ -6,6 +6,9 @@ public class UserRequest {
     private String password;
     private String email;
 
+    public UserRequest() {
+    }
+
     public UserRequest(String userId, String name, String password, String email) {
         this.userId = userId;
         this.name = name;
@@ -27,5 +30,21 @@ public class UserRequest {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

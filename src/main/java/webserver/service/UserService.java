@@ -13,4 +13,9 @@ public class UserService {
 
         DataBase.addUser(user);
     }
+
+    public boolean login(UserRequest request) {
+        User user = DataBase.findUserById(request.getUserId());
+        return user != null && request.getPassword().equals(user.getPassword());
+    }
 }

@@ -17,9 +17,10 @@ public class ServiceHandler implements Handler {
             executor(controller, httpRequest, httpResponse);
         } else {
             httpResponse.setStatusCode(HttpStatus.NOT_FOUND);
-            return;
         }
-        httpResponse.setStatusCode(HttpStatus.OK);
+        if (httpResponse.getStatusCode() == null) {
+            httpResponse.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private void executor(Controller controller, HttpRequest httpRequest, HttpResponse httpResponse) {

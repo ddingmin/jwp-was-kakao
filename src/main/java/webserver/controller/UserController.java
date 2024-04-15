@@ -21,9 +21,16 @@ public class UserController implements Controller {
         return "/index.html";
     }
 
+    public String login(UserRequest request) {
+        if (userService.login(request)) {
+            return "/index.html";
+        }
+        return "/user/login_failed.html";
+    }
+
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
-        if (request.getPath().equals("/user/create")) {
+        if (request.getPath().equals("/user/login")) {
             UserRequest userRequest = new UserRequest(request.getAttribute("userId"),
                     request.getAttribute("name"),
                     request.getAttribute("password"),
@@ -42,9 +49,22 @@ public class UserController implements Controller {
                     userParameters.get("name"),
                     userParameters.get("password"),
                     userParameters.get("email"));
+
             String target = register(userRequest);
             response.setStatusCode(HttpStatus.FOUND);
             response.addHeader("Location", target);
+            return;
+        }
+        if (request.getPath().equals("/user/login")) {
+            Map<String, String> userParameters = KeyValueParser.parse(request.getBody());
+            UserRequest userRequest = new UserRequest();
+            userRequest.setUserId(userParameters.get("userId"));
+            userRequest.setPassword(userParameters.get("password"));
+
+            String target = login(userRequest);
+            response.setStatusCode(HttpStatus.FOUND);
+            response.addHeader("Location", target);
+            return;
         }
     }
 }
