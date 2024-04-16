@@ -1,4 +1,4 @@
-package utils;
+package webserver.http.parser;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,5 +35,17 @@ class KeyValueParserTest {
     void empty() {
         String input = "";
         Map<String, String> parsed = KeyValueParser.parse(input);
+    }
+
+    @Test
+    @DisplayName("key=v=v2의 경우 모든 value 값이 담긴다")
+    void unsupported() {
+        String input = "key=value=value2&key2=value2=value3=value4";
+        Map<String, String> parsed = KeyValueParser.parse(input);
+
+        assertAll(
+                () -> assertThat(parsed.get("key")).isEqualTo("value=value2"),
+                () -> assertThat(parsed.get("key2")).isEqualTo("value2=value3=value4")
+        );
     }
 }

@@ -1,6 +1,6 @@
 package webserver.controller;
 
-import utils.KeyValueParser;
+import webserver.http.parser.KeyValueParser;
 import webserver.controller.request.UserRequest;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
