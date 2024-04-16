@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HttpResponse {
+    private HttpProtocolVersion version;
     private HttpStatus statusCode;
     private Map<String, String> headers = new HashMap<>();
     private byte[] body = new byte[0];
@@ -20,7 +21,7 @@ public class HttpResponse {
     }
 
     public String getStartLine() {
-        return "HTTP/1.1 " + statusCode.getValue() + " " + statusCode.getMessage();
+        return HttpProtocolVersion.HTTP1_1.getValue() + " " + statusCode.getValue() + " " + statusCode.getMessage();
     }
 
     public HttpStatus getStatusCode() {
