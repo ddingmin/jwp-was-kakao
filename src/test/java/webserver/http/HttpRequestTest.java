@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import webserver.http.parser.HttpRequestParser;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,7 +23,7 @@ public class HttpRequestTest {
     @CsvSource(value = {"GET / HTTP/1.1, GET", "POST / HTTP/1.1, POST"})
     @DisplayName("http request startLine의 메소드를 저장한다.")
     void request_get_http_method(String requestRaw, String method) {
-        HttpRequest request = new HttpRequest(requestRaw);
+        HttpRequest request = new HttpRequest(HttpRequestParser.parseRequestLine(requestRaw), null, null);
 
         assertThat(request.getMethod()).isEqualTo(HttpMethod.valueOf(method));
     }
@@ -31,7 +32,7 @@ public class HttpRequestTest {
     @CsvSource(value = {"GET /index.html HTTP/1.1, /index.html", "GET / HTTP/1.1, /"})
     @DisplayName("http request startLine의 경로를 저장한다.")
     void request_path(String requestRaw, String path) {
-        HttpRequest request = new HttpRequest(requestRaw);
+        HttpRequest request = new HttpRequest(HttpRequestParser.parseRequestLine(requestRaw), null, null);
 
         assertThat(request.getPath()).isEqualTo(path);
     }
@@ -40,24 +41,17 @@ public class HttpRequestTest {
     @CsvSource(value = {"GET /index.html HTTP/1.1, true", "GET / HTTP/1.1, false", "GET /menu/favicon.ico HTTP/1.1, true"})
     @DisplayName("http request startLine의 경로의 확장자를 저장한다.")
     void has_extension(String requestRaw, boolean hasExtension) {
-        HttpRequest request = new HttpRequest(requestRaw);
+        HttpRequest request = new HttpRequest(HttpRequestParser.parseRequestLine(requestRaw), null, null);
 
         assertThat(request.hasExtension()).isEqualTo(hasExtension);
     }
 
     @Test
-    @DisplayName("http request body가 없는 경우 빈 body를 저장한다.")
-    void no_body(){
-        HttpRequest request = new HttpRequest("GET uri HTTP/1.1\nkey:value\n\n");
+    @DisplayName("http request body가 없는 경우 null을 저장한다.")
+    void no_body() {
+        String requestRaw = "GET /uri HTTP/1.1\nkey:value";
+        HttpRequest request = new HttpRequest(HttpRequestParser.parseRequestLine(requestRaw), null, null);
 
-        assertThat(request.getBody()).isEqualTo("");
-    }
-
-    @Test
-    @DisplayName("http request body를 저장한다.")
-    void body(){
-        HttpRequest request = new HttpRequest("GET uri HTTP/1.1\nkey: value\n\nbody");
-
-        assertThat(request.getBody()).isEqualTo("body");
+        assertThat(request.getBody()).isNull();
     }
 }

@@ -5,8 +5,11 @@ import org.slf4j.LoggerFactory;
 import utils.RequestReaderUtils;
 import webserver.handler.Handler;
 import webserver.handler.RequestHandlerMapper;
+import webserver.http.Headers;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
+import webserver.http.RequestLine;
+import webserver.http.parser.HttpRequestParser;
 
 import java.io.*;
 import java.net.Socket;
@@ -29,13 +32,14 @@ public class RequestHandler implements Runnable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
             String requestHeader = RequestReaderUtils.readHeader(reader);
-            logger.debug(requestHeader);
 
-            HttpRequest httpRequest = new HttpRequest(requestHeader);
-            httpRequest.setBody(RequestReaderUtils.readBody(reader, Integer.parseInt(httpRequest.getAttribute("Content-Length"))));
-            logger.debug(httpRequest.getBody());
+            RequestLine requestLine = HttpRequestParser.parseRequestLine(requestHeader);
+            Headers requestHeaders = HttpRequestParser.parseHeaders(requestHeader);
+            String requestBody = RequestReaderUtils.readBody(reader, Integer.parseInt(requestHeaders.get("Content-Length")));
 
+            HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, requestBody);
             HttpResponse httpResponse = new HttpResponse();
+
             Handler handler = RequestHandlerMapper.mapping(httpRequest);
             handler.handle(httpRequest, httpResponse);
 
