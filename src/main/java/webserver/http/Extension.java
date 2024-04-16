@@ -1,6 +1,8 @@
 package webserver.http;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public enum Extension {
     CSS(".css", MIME.CSS, ResourceType.STATIC),
@@ -16,6 +18,10 @@ public enum Extension {
     WOFF(".woff", MIME.WOFF, ResourceType.STATIC),
     WOFF2(".woff2", MIME.WOFF2, ResourceType.STATIC);
 
+    private static final Map<String, Extension> valueMap = Arrays.stream(values()).collect(Collectors.toMap(
+            it -> it.getValue(),
+            it -> it
+    ));
     private final String value;
     private final MIME mime;
     private final ResourceType resourceType;
@@ -27,10 +33,11 @@ public enum Extension {
     }
 
     public static Extension from(String extension) {
-        return Arrays.stream(Extension.values())
-                .filter(it -> it.getValue().equals(extension.toLowerCase()))
-                .findAny()
-                .orElseGet(null);
+        try {
+            return valueMap.get(extension.toLowerCase());
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public String getValue() {
