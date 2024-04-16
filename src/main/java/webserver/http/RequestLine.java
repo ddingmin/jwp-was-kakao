@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class StartLine {
+public class RequestLine {
     private final HttpMethod method;
     private final String uri;
     private final String path;
     private final Extension extension;
     private Map<String, String> attributes = new HashMap<>();
 
-    public StartLine(String line) {
+    public RequestLine(String line) {
         String[] split = line.split(" ");
         this.method = HttpMethod.valueOf(split[0].toUpperCase());
         this.uri = split[1];

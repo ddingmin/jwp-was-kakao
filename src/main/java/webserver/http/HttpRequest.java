@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HttpRequest {
-    private final StartLine startLine;
+    private final RequestLine requestLine;
     private final Headers headers;
     private String body;
 
     public HttpRequest(String request) {
         String[] split = request.split("\n");
-        this.startLine = new StartLine(split[0]);
+        this.requestLine = new RequestLine(split[0]);
 
         boolean isHeaders = true;
         List<String> headerList = new ArrayList<>();
@@ -33,19 +33,19 @@ public class HttpRequest {
     }
 
     public HttpMethod getMethod() {
-        return startLine.getMethod();
+        return requestLine.getMethod();
     }
 
     public String getPath() {
-        return startLine.getPath();
+        return requestLine.getPath();
     }
 
     public Extension getExtension() {
-        return startLine.getExtension();
+        return requestLine.getExtension();
     }
 
     public boolean hasExtension() {
-        return startLine.hasExtension();
+        return requestLine.hasExtension();
     }
 
     public String getBody() {
@@ -63,7 +63,7 @@ public class HttpRequest {
     @Override
     public String toString() {
         return "HttpRequest{" +
-                "startLine=" + startLine +
+                "startLine=" + requestLine +
                 ", headers=" + headers +
                 ", body='" + body + '\'' +
                 '}';
