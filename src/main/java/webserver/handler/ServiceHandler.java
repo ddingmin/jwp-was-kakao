@@ -11,7 +11,7 @@ import webserver.service.UserService;
 public class ServiceHandler implements Handler {
 
     @Override
-    public void handling(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void handle(HttpRequest httpRequest, HttpResponse httpResponse) {
         if (httpRequest.getPath().startsWith("/user")) {
             Controller controller = new UserController(new UserService());
             executor(controller, httpRequest, httpResponse);

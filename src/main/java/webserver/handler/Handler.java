@@ -4,5 +4,5 @@ import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 
 public interface Handler {
-    void handling(HttpRequest httpRequest, HttpResponse httpResponse);
+    void handle(HttpRequest httpRequest, HttpResponse httpResponse);
 }

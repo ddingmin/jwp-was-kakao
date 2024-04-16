@@ -8,7 +8,7 @@ import webserver.http.HttpStatus;
 
 public class ResourceHandler implements Handler {
     @Override
-    public void handling(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public void handle(HttpRequest httpRequest, HttpResponse httpResponse) {
         try {
             Extension extension = httpRequest.getExtension();
             httpResponse.setStatusCode(HttpStatus.OK);

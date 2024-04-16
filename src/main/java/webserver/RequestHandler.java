@@ -37,7 +37,7 @@ public class RequestHandler implements Runnable {
 
             HttpResponse httpResponse = new HttpResponse();
             Handler handler = RequestHandlerMapper.mapping(httpRequest);
-            handler.handling(httpRequest, httpResponse);
+            handler.handle(httpRequest, httpResponse);
 
             response(httpResponse);
         } catch (Exception e) {
