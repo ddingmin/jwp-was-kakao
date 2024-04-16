@@ -1,9 +1,9 @@
 package webserver.http;
 
-import java.util.Arrays;
+import webserver.http.parser.KeyValueParser;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class RequestLine {
     private final HttpMethod method;
@@ -32,12 +32,7 @@ public class RequestLine {
     }
 
     private void initAttributes(String queryString) {
-        this.attributes = Arrays.stream(queryString.split("&"))
-                .map(it -> it.split("="))
-                .collect(Collectors.toMap(
-                        it -> it[0],
-                        it -> it[1]
-                ));
+        this.attributes = KeyValueParser.parse(queryString);
     }
 
     public HttpMethod getMethod() {
