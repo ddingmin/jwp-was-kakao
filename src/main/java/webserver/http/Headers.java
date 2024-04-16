@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Headers {
-    private Map<String, String> headers = new HashMap<>();
+    private final Map<String, String> headers = new HashMap<>();
 
     public Headers(List<String> headers) {
         this.headers.put("Content-Length", "0");

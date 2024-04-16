@@ -64,7 +64,6 @@ public class UserController implements Controller {
             String target = login(userRequest);
             response.setStatusCode(HttpStatus.FOUND);
             response.addHeader("Location", target);
-            return;
         }
     }
 }
