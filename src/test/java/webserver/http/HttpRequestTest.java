@@ -48,7 +48,7 @@ public class HttpRequestTest {
     @Test
     @DisplayName("http request body가 없는 경우 빈 body를 저장한다.")
     void no_body(){
-        HttpRequest request = new HttpRequest("GET uri version\nkey:value\n\n");
+        HttpRequest request = new HttpRequest("GET uri HTTP/1.1\nkey:value\n\n");
 
         assertThat(request.getBody()).isEqualTo("");
     }
@@ -56,7 +56,7 @@ public class HttpRequestTest {
     @Test
     @DisplayName("http request body를 저장한다.")
     void body(){
-        HttpRequest request = new HttpRequest("GET uri version\nkey: value\n\nbody");
+        HttpRequest request = new HttpRequest("GET uri HTTP/1.1\nkey: value\n\nbody");
 
         assertThat(request.getBody()).isEqualTo("body");
     }
