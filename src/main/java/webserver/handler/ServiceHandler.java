@@ -15,6 +15,9 @@ public class ServiceHandler implements Handler {
         if (httpRequest.getPath().startsWith("/user")) {
             Controller controller = new UserController(new UserService());
             executor(controller, httpRequest, httpResponse);
+        } else if (httpRequest.getPath().startsWith("/")) {
+            Controller controller = new HomeController();
+            executor(controller, httpRequest, httpResponse);
         } else {
             httpResponse.setStatusCode(HttpStatus.NOT_FOUND);
         }
