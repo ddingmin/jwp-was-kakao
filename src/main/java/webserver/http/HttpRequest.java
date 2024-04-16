@@ -1,5 +1,7 @@
 package webserver.http;
 
+import webserver.http.parser.HttpRequestParser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ public class HttpRequest {
 
     public HttpRequest(String request) {
         String[] split = request.split("\n");
-        this.requestLine = new RequestLine(split[0]);
+        this.requestLine = HttpRequestParser.parseRequestLine(split[0]);
 
         boolean isHeaders = true;
         List<String> headerList = new ArrayList<>();

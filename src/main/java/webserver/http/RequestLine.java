@@ -9,19 +9,17 @@ public class RequestLine {
     private final HttpMethod method;
     private final String uri;
     private final String path;
+    private final HttpProtocolVersion version;
     private final Extension extension;
     private Map<String, String> attributes = new HashMap<>();
 
-    public RequestLine(String line) {
-        String[] split = line.split(" ");
-        this.method = HttpMethod.valueOf(split[0].toUpperCase());
-        this.uri = split[1];
+    public RequestLine(String method, String uri, String version) {
+        this.method = HttpMethod.valueOf(method.toUpperCase());
+        this.uri = uri;
         this.path = uri.split("\\?")[0];
+        this.version = HttpProtocolVersion.from(version.toUpperCase());
         this.extension = initExtension();
-        if (uri.split("\\?").length == 2) {
-            String queryString = uri.split("\\?")[1];
-            initAttributes(queryString);
-        }
+        initAttributes();
     }
 
     private Extension initExtension() {
@@ -31,7 +29,14 @@ public class RequestLine {
         return null;
     }
 
-    private void initAttributes(String queryString) {
+    private void initAttributes() {
+        if (uri.split("\\?").length == 2) {
+            String queryString = uri.split("\\?")[1];
+            initAttribute(queryString);
+        }
+    }
+
+    private void initAttribute(String queryString) {
         this.attributes = KeyValueParser.parse(queryString);
     }
 
@@ -45,6 +50,10 @@ public class RequestLine {
 
     public String getPath() {
         return path;
+    }
+
+    public HttpProtocolVersion getVersion() {
+        return version;
     }
 
     public String getAttribute(String key) {
