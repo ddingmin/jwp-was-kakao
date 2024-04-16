@@ -1,10 +1,10 @@
 package webserver.controller;
 
-import webserver.http.parser.KeyValueParser;
 import webserver.controller.request.UserRequest;
 import webserver.http.HttpRequest;
 import webserver.http.HttpResponse;
 import webserver.http.HttpStatus;
+import webserver.http.parser.KeyValueParser;
 import webserver.service.UserService;
 
 import java.util.Map;
@@ -30,15 +30,6 @@ public class UserController implements Controller {
 
     @Override
     public void doGet(HttpRequest request, HttpResponse response) {
-        if (request.getPath().equals("/user/login")) {
-            UserRequest userRequest = new UserRequest(request.getAttribute("userId"),
-                    request.getAttribute("name"),
-                    request.getAttribute("password"),
-                    request.getAttribute("email"));
-            String target = register(userRequest);
-            response.setStatusCode(HttpStatus.FOUND);
-            response.addHeader("Location", target);
-        }
     }
 
     @Override
