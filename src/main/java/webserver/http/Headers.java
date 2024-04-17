@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 public class Headers {
+    public static final String CONTENT_LENGTH = "Content-Length";
     private final Map<String, String> headers = new HashMap<>();
 
     public Headers(List<String> headers) {
-        this.headers.put("Content-Length", "0");
         headers.stream()
                 .map(it -> it.split(":", 2))
                 .forEach(it -> this.headers.put(it[0], it[1].trim()));
@@ -16,6 +16,13 @@ public class Headers {
 
     public String get(String key) {
         return headers.get(key);
+    }
+
+    public int getContentLength() {
+        if (headers.containsKey(CONTENT_LENGTH)) {
+            return Integer.parseInt(headers.get(CONTENT_LENGTH));
+        }
+        return 0;
     }
 
     @Override

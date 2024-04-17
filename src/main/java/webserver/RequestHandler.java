@@ -35,7 +35,7 @@ public class RequestHandler implements Runnable {
 
             RequestLine requestLine = HttpRequestParser.parseRequestLine(requestHeader);
             Headers requestHeaders = HttpRequestParser.parseHeaders(requestHeader);
-            String requestBody = RequestReaderUtils.readBody(reader, Integer.parseInt(requestHeaders.get("Content-Length")));
+            String requestBody = RequestReaderUtils.readBody(reader, requestHeaders.getContentLength());
 
             HttpRequest httpRequest = new HttpRequest(requestLine, requestHeaders, requestBody);
             HttpResponse httpResponse = new HttpResponse();
