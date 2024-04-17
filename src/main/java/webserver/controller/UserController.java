@@ -9,6 +9,9 @@ import webserver.service.UserService;
 
 import java.util.Map;
 
+import static webserver.http.parser.KeyValueParser.KEY_VALUE_DELIMITER;
+import static webserver.http.parser.KeyValueParser.QUERY_DELIMITER;
+
 public class UserController implements Controller {
     private final UserService userService;
 
@@ -35,7 +38,7 @@ public class UserController implements Controller {
     @Override
     public void doPost(HttpRequest request, HttpResponse response) {
         if (request.getPath().equals("/user/create")) {
-            Map<String, String> userParameters = KeyValueParser.parse(request.getBody());
+            Map<String, String> userParameters = KeyValueParser.parse(request.getBody(), QUERY_DELIMITER, KEY_VALUE_DELIMITER);
             UserRequest userRequest = new UserRequest(userParameters.get("userId"),
                     userParameters.get("name"),
                     userParameters.get("password"),
@@ -47,7 +50,7 @@ public class UserController implements Controller {
             return;
         }
         if (request.getPath().equals("/user/login")) {
-            Map<String, String> userParameters = KeyValueParser.parse(request.getBody());
+            Map<String, String> userParameters = KeyValueParser.parse(request.getBody(), KEY_VALUE_DELIMITER, QUERY_DELIMITER);
             UserRequest userRequest = new UserRequest();
             userRequest.setUserId(userParameters.get("userId"));
             userRequest.setPassword(userParameters.get("password"));

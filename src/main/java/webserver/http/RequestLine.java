@@ -5,6 +5,9 @@ import webserver.http.parser.KeyValueParser;
 import java.util.HashMap;
 import java.util.Map;
 
+import static webserver.http.parser.KeyValueParser.KEY_VALUE_DELIMITER;
+import static webserver.http.parser.KeyValueParser.QUERY_DELIMITER;
+
 public class RequestLine {
     private final HttpMethod method;
     private final String uri;
@@ -37,7 +40,7 @@ public class RequestLine {
     }
 
     private void initAttribute(String queryString) {
-        this.attributes = KeyValueParser.parse(queryString);
+        this.attributes = KeyValueParser.parse(queryString, QUERY_DELIMITER, KEY_VALUE_DELIMITER);
     }
 
     public HttpMethod getMethod() {

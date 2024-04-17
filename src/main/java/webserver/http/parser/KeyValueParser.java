@@ -8,12 +8,13 @@ import java.util.stream.Collectors;
 public class KeyValueParser {
 
     public static final String KEY_VALUE_DELIMITER = "=";
+    public static final String COOKIE_DELIMITER = ";";
     public static final String QUERY_DELIMITER = "&";
 
-    public static Map<String, String> parse(String input) {
+    public static Map<String, String> parse(String input, String delimiter, String keyValueDelimiter) {
         try {
-            return Arrays.stream(input.split(QUERY_DELIMITER))
-                    .map(it -> it.split(KEY_VALUE_DELIMITER, 2))
+            return Arrays.stream(input.split(delimiter))
+                    .map(it -> it.split(keyValueDelimiter, 2))
                     .collect(Collectors.toMap(
                             it -> it[0].trim(),
                             it -> it[1].trim()
