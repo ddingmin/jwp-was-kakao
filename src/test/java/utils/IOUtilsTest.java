@@ -1,5 +1,6 @@
 package utils;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ public class IOUtilsTest {
     private static final Logger logger = LoggerFactory.getLogger(IOUtilsTest.class);
 
     @Test
+    @DisplayName("데이터를 읽는다.")
     public void readData() throws Exception {
         String data = "abcd123";
         StringReader sr = new StringReader(data);
