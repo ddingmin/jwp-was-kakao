@@ -1,5 +1,7 @@
 package webserver.http;
 
+import utils.Encoder;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,10 @@ public class HttpResponse {
         this.statusCode = statusCode;
         this.headers = headers;
         this.body = body;
+    }
+
+    public static HttpResponse NOT_FOUND() {
+        return new HttpResponse(HttpStatus.NOT_FOUND, new HashMap<>(), new byte[0]);
     }
 
     public String getStartLine() {
@@ -54,5 +60,9 @@ public class HttpResponse {
     public void setBody(byte[] body) {
         headers.put("Content-Length", String.valueOf(body.length));
         this.body = body;
+    }
+
+    public void setBody(String body) {
+        setBody(Encoder.toBytes(body));
     }
 }

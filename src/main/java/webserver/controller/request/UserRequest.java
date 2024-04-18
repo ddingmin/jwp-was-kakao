@@ -1,5 +1,7 @@
 package webserver.controller.request;
 
+import webserver.http.HttpRequest;
+
 public class UserRequest {
     private String userId;
     private String name;
@@ -9,11 +11,18 @@ public class UserRequest {
     public UserRequest() {
     }
 
-    public UserRequest(String userId, String name, String password, String email) {
+    private UserRequest(String userId, String name, String password, String email) {
         this.userId = userId;
         this.name = name;
         this.password = password;
         this.email = email;
+    }
+
+    public static UserRequest from(HttpRequest request) {
+        return new UserRequest(request.getAttribute("name"),
+                request.getAttribute("userId"),
+                request.getAttribute("password"),
+                request.getAttribute("email"));
     }
 
     public String getUserId() {
