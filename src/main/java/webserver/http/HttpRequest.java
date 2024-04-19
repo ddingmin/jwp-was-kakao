@@ -3,7 +3,7 @@ package webserver.http;
 public class HttpRequest {
     private final RequestLine requestLine;
     private final Headers headers;
-    private String body;
+    private final String body;
 
     public HttpRequest(RequestLine requestLine, Headers headers, String body) {
         this.requestLine = requestLine;
